@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load static %}
+<html>
+<head>
+    <title>Leaflet Quick Start Guide Example</title>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+</head>
+<body>
+    <div id="map" style="width: 800px; height: 600px"></div>
+
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+    <script src="{% static 'L.Polyline.SnakeAnim.js' %}"></script>
+    <script>
+        var map = L.map('map',{
+    center: {{start_point}},
+    zoom: 18,
+    maxZoom:18,
+
+});
+
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var LeafIcon = L.Icon.extend({
+            options: {
+                // shadowUrl: '../docs/images/leaf-shadow.png',
+                iconSize:     [45, 18],
+                // shadowSize:   [50, 64],
+                iconAnchor:   [34, 9],
+                // shadowAnchor: [4, 62],
+                popupAnchor:  [-3, -76],
+                
+
+            }
+        });
+
+        var carIcon = new LeafIcon({iconUrl: "{% static 'car.png' %}"})
+            
+
+
+        L.marker({{start_point}}).bindPopup("Start Point.").addTo(map);
+        L.marker({{end_point}}).bindPopup("End Point.").addTo(map);
+
+        var latlngs = Array();
+
+//Get latlng from first marker
+latlngs.push([19.0760,72.8777]);
+
+//Get latlng from first marker
+latlngs.push([19.2372,72.8441]);
+
+
+/*
+ * Extends L.Polyline to retrieve measured distance.
+ *
+ * https://github.com/danimt/Leaflet.PolylineMeasuredDistance
+ */
+
+
+
+//You can just keep adding markers
+
+//From documentation http://leafletjs.com/reference.html#polyline
+// create a red polyline from an arrays of LatLng points
+
+var polyline = L.polyline({{geoData}}, {snakingSpeed: 10}).addTo(map)
+
+
+
+polyline.on('snakestart snake snakeend', function(ev){
+			console.log(ev.type);
+		});
+
+   console.log(polyline.measuredDistance());
+    document.write(polyline.measuredDistance());
+
+
+<!--var element = document.getElementById("distance");-->
+<!--element.innerHTML = polyline.measuredDistance();-->
+<!--alert(element.innerHTML);-->
+
+
+
+polyline.measuredDistance({
+  metric: false
+});
+
+// zoom the map to the polyline
+map.fitBounds(polyline.getBounds());
+        
+polyline.snakeIn();
+
+    </script>
+</body>
+
+<p>Total Distance traveled:</p>
+<p id="distance"></p>
+</html>

@@ -1,0 +1,65 @@
+<!--<!DOCTYPE html>-->
+<!--{% load staticfiles %}-->
+<!--{% load static %}-->
+<!--<html>-->
+  <!--<head>-->
+    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+    <!--<link rel="stylesheet" type="text/css" media="screen"-->
+     <!--href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">-->
+  <!--</head>-->
+  <!--<body>-->
+  <!--<form action="{% url 'details' %}" method="POST">-->
+    <!--<div id="datetimepicker" class="input-append date">-->
+
+        <!--<input name="startDtaeTime" type="text">Start Date Time:</input>-->
+
+      <!--<span class="add-on">-->
+        <!--<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>-->
+      <!--</span>-->
+    <!--</div>-->
+      <!--<div id="datetimepicker" class="input-append date">-->
+
+        <!--<input name="EndDtaeTime" type="text">End Date Time:</input>-->
+
+      <!--<span class="add-on">-->
+        <!--<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>-->
+      <!--</span>-->
+    <!--</div>-->
+    <!--<script type="text/javascript"-->
+     <!--src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">-->
+    <!--</script>-->
+    <!--<script type="text/javascript"-->
+     <!--src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">-->
+    <!--</script>-->
+    <!--<script type="text/javascript"-->
+     <!--src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">-->
+    <!--</script>-->
+    <!--<script type="text/javascript"-->
+     <!--src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">-->
+    <!--</script>-->
+    <!--<script type="text/javascript">-->
+      <!--$('#datetimepicker').datetimepicker({-->
+        <!--format: 'dd/MM/yyyy hh:mm:ss',-->
+        <!--language: 'pt-BR'-->
+      <!--});-->
+    <!--</script>-->
+  <!--<button type="submit" class="save btn btn-default">Submit123</button>-->
+            <!--</form>-->
+  <!--</body>-->
+<!--<html>-->
+
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load static %}
+  <head>
+</head>
+
+<form action="{% url 'details' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Submit</button>
+
+</form>
+
+
+</html>

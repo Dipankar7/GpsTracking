@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load static %}
+
+
+{% block content %}
+
+<link href="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css" rel="stylesheet" type="text/css" />
+<!-- <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script> -->
+<script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet-src.js"></script>
+<script src="https://cdn.jsdelivr.net/leaflet.esri/2.0.2/esri-leaflet.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.1/esri-leaflet-geocoder.css">
+<script src="https://cdn.jsdelivr.net/leaflet.esri.geocoder/2.1.1/esri-leaflet-geocoder.js"></script>
+<script src="{% static 'L.Polyline.SnakeAnim.js' %}"></script>
+<script src="{% static 'polylineMeasure.js' %}"></script>
+
+
+<div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Trip Summary</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Distance traveled</div>
+									<div class="huge">
+										<h3 id="distance"></h3>
+									</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Average Speed:</div>
+									<div class="huge">
+										<h3 id="speed"></h3>
+									</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Driving Duration:</div>
+									<div class="huge">
+										<h3>{{TimeReq}}</h3>
+									</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+									<div>Alert</div>
+                                    <div class="huge">0</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {%if geoData%}
+                            <div id="map" style="width: 650px; height: 250px; border: 1px solid #ccc"></div>
+                            {% else %}
+                            <h3>No Data Found for given time </h3>
+                            {% endif %}
+                        </div>
+                        <!-- /.panel-heading -->
+
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                    <!-- /.panel -->
+                    <div class="chat-panel panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i> Trip Points
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="chat">
+                                <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Start Point</strong>
+
+                                        </div>
+                                        <p id="start">
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">End Point</strong>
+
+                                        </div>
+                                        <p id="end">
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.panel-body -->
+
+                    </div>
+                    <!-- /.panel -->
+
+                    <!-- /.panel .chat-panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+        </div>
+
+	<!--<div><p>Badger badger badger badger badger badger badger<br> badger badger badger badger badger mushroom mushroom!<p>-->
+	<!--<p>Badger badger badger badger badger badger badger<br> badger badger badger badger badger <button onclick='snake()'>SNAKE! IT'S A SNAKE!</button></p></div>-->
+
+	<!--<script src="{% static 'route.js' %}"></script>-->
+
+	<script >
+		var route={{geoData}}
+		for (var i = 0, latlngs = [], len = route.length; i < len; i++) {
+			latlngs.push(new L.LatLng(route[i][0], route[i][1]));
+		}
+
+		var path = L.polyline(latlngs,{snakingSpeed:200});
+
+		var map = L.map('map');
+
+		//var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+		//	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+		//}).addTo(map);
+
+		var positron=L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright"></a> contributors'
+        }).addTo(map);
+
+		map.fitBounds(L.latLngBounds(latlngs));
+
+		map.addLayer(L.marker(latlngs[0]));
+		map.addLayer(L.marker(latlngs[len - 1]));
+
+		map.addLayer(path);
+
+
+
+		path.on('snakestart snake snakeend', function(ev){
+			console.log(ev.type);
+		});
+		<!--polyline.measuredDistance({-->
+  <!--metric: false-->
+<!--});-->
+
+	path.snakeIn();
+	//console.log(path.measuredDistance());
+
+
+	var geocodeService = L.esri.Geocoding.geocodeService();
+
+	geocodeService.reverse().latlng(latlngs[0]).run(function(error, result)
+	{
+	document.getElementById("start").innerHTML =result.address.Match_addr;
+	});
+	geocodeService.reverse().latlng(latlngs[len - 1]).run(function(error, result)
+	{
+	document.getElementById("end").innerHTML =result.address.Match_addr;
+	});
+
+  map.on('click', function(e) {
+    geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
+    	var popLocation=result.latlng
+    	var popup=L.popup()
+    	.setLatLng(popLocation)
+        .setContent(result.address.Match_addr)
+        .openOn(map);
+
+    });
+  });
+	</script>
+<script>
+	var polyline = L.polyline({{geoData}})
+	polyline.measuredDistance({
+  	metric: false
+	});
+	var dist=polyline.measuredDistance();
+	document.getElementById("distance").innerHTML =dist;
+	val=dist.slice(0,-3)
+	time={{HrTime}}
+	avg_speed=val/time
+	//document.write(avg_speed.toFixed(2))
+	document.getElementById("speed").innerHTML =avg_speed.toFixed(2)+" km/hr";
+
+</script>
+
+{% endblock %}
